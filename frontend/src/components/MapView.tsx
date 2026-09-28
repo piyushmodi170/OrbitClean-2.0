@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { DumpSite, Recycler, RiskCell, FieldReport, CollectionZone, CleanedSite, CommunityPhoto } from "@/types";
+import { CARTO_ATTRIBUTION, cartoTileUrl } from "@/lib/carto";
 
 interface Props {
   dumps: DumpSite[];
@@ -58,8 +59,9 @@ export default function MapView(props: Props) {
       });
       const map = L.map(containerRef.current!, { center: [13.059, 77.630], zoom: 14, zoomControl: false });
       L.control.zoom({ position: "bottomright" }).addTo(map);
-      L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
-        attribution: '&copy; <a href="https://carto.com/">CARTO</a> &copy; <a href="https://osm.org/">OSM</a>',
+      L.tileLayer(cartoTileUrl("light_all"), {
+        attribution: CARTO_ATTRIBUTION,
+        subdomains: "abcd",
         maxZoom: 19,
       }).addTo(map);
       mapRef.current = map;
