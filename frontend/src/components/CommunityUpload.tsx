@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useCallback } from "react";
+import { apiBase as defaultApiBase } from "@/lib/api";
 
 interface UploadResult {
   id: string;
@@ -9,7 +10,7 @@ interface UploadResult {
   classification: { dominant_stream?: string } | null;
 }
 
-export default function CommunityUpload({ apiBase = "http://localhost:8000" }: { apiBase?: string }) {
+export default function CommunityUpload({ apiBase = defaultApiBase() }: { apiBase?: string }) {
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [result, setResult] = useState<UploadResult | null>(null);

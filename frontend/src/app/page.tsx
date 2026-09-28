@@ -3,9 +3,9 @@
 import dynamic from "next/dynamic";
 import { useState, useEffect, type ReactNode } from "react";
 import type { DumpSite } from "@/types";
-import { DUMPS, WARDS, RISK_GRID, WARD_ROUTES } from "@/lib/data";
 import { useFieldReports } from "@/lib/useFieldReports";
 import { useCleanupData } from "@/lib/useCleanupData";
+import { useLiveBoard } from "@/lib/useLiveBoard";
 
 import Link from "next/link";
 import DumpList from "@/components/DumpList";
@@ -90,6 +90,7 @@ export default function DashboardPage() {
   const [search, setSearch] = useState("");
   const { reports: fieldReports, newCount } = useFieldReports();
   const { cleanedSites, communityPhotos, refresh: refreshCleanup } = useCleanupData();
+  const { dumps: DUMPS, riskGrid: RISK_GRID, wards: WARDS, routes: WARD_ROUTES, live, updatedAt } = useLiveBoard();
 
   // Persist dark mode to localStorage
   useEffect(() => {
@@ -173,8 +174,12 @@ export default function DashboardPage() {
               </span>
             </div>
             <div className="flex items-center gap-1 mt-0.5">
-              <div className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: "#16a34a" }} />
-              <span style={{ fontSize: "9px", color: "var(--mu)" }}>Thanisandra · Live</span>
+              <div className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: live ? "#16a34a" : "#ca8a04" }} />
+              <span style={{ fontSize: "9px", color: "var(--mu)" }}>
+                {live
+                  ? `API live · ${updatedAt ? updatedAt.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" }) : "syncing"}`
+                  : "API offline · demo data"}
+              </span>
             </div>
           </div>
         </div>

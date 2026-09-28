@@ -4,7 +4,7 @@ const BACKEND = "http://localhost:8000";
 
 async function handler(req: NextRequest, { params }: { params: Promise<{ path: string[] }> }) {
   const { path } = await params;
-  const backendUrl = `${BACKEND}/${path.join("/")}`;
+  const backendUrl = `${BACKEND}/${path.join("/")}${req.nextUrl.search}`;
 
   const headers: Record<string, string> = {};
   req.headers.forEach((v, k) => {

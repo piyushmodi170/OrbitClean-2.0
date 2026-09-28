@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+import { apiUrl } from "@/lib/api";
 
 interface AnomalyAlert {
   zone_id: string;
@@ -58,17 +58,23 @@ export default function AlertsPanel() {
   }
 
   useEffect(() => {
-    fetch(`${API_BASE}/api/anomalies`)
-      .then((r) => r.json())
-      .then((data) => {
-        setAlerts(data.alerts ?? []);
-        setLoading(false);
-      })
-      .catch(() => {
-        setAlerts(FALLBACK);
-        setOffline(true);
-        setLoading(false);
-      });
+    const load = () => {
+      fetch(apiUrl("/api/anomalies"), { cache: "no-store" })
+        .then((r) => r.json())
+        .then((data) => {
+          setAlerts(data.alerts ?? []);
+          setOffline(false);
+          setLoading(false);
+        })
+        .catch(() => {
+          setAlerts(FALLBACK);
+          setOffline(true);
+          setLoading(false);
+        });
+    };
+    load();
+    const id = setInterval(load, 15000);
+    return () => clearInterval(id);
   }, []);
 
   const confirmed = alerts.filter((a) => a.true_anomaly && !dismissed.has(a.zone_id));

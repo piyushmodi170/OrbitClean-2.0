@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import type { CleanupMission } from "@/types";
+import { apiBase as defaultApiBase } from "@/lib/api";
 
 interface Props {
   apiBase?: string;
@@ -28,7 +29,7 @@ const STATUS_LABELS: Record<string, string> = {
   cancelled: "Cancelled",
 };
 
-export default function CleanupTracker({ apiBase = "http://localhost:8000", onMissionsUpdate }: Props) {
+export default function CleanupTracker({ apiBase = defaultApiBase(), onMissionsUpdate }: Props) {
   const [missions, setMissions] = useState<CleanupMission[]>([]);
   const [stats, setStats] = useState({ total: 0, pending: 0, verified: 0 });
   const [generating, setGenerating] = useState(false);

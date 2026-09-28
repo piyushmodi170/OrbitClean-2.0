@@ -2,8 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import type { CleanedSite, CommunityPhoto } from "@/types";
-
-const API_BASE = "http://localhost:8000";
+import { apiUrl } from "@/lib/api";
 
 // Mock data for offline demo
 const MOCK_CLEANED: CleanedSite[] = [
@@ -38,8 +37,8 @@ export function useCleanupData() {
   const refresh = useCallback(async () => {
     try {
       const [cleanedRes, photosRes] = await Promise.all([
-        fetch(`${API_BASE}/api/cleanup/cleaned`),
-        fetch(`${API_BASE}/api/community/active-photos`),
+        fetch(apiUrl("/api/cleanup/cleaned"), { cache: "no-store" }),
+        fetch(apiUrl("/api/community/active-photos"), { cache: "no-store" }),
       ]);
       if (cleanedRes.ok) {
         const data = await cleanedRes.json();
