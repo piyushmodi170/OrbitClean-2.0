@@ -4,6 +4,7 @@
  */
 "use client";
 import { useEffect, useRef, useState, useCallback } from "react";
+import { cartoTileUrl } from "@/lib/carto";
 
 interface Stop { id:string; lat:number; lon:number; type:"depot"|"residential"|"dump"; name:string; households:number; waste_kg:number; risk?:number; }
 export interface TruckStats { households:number; waste_kg:number; cap_pct:number; status:"idle"|"running"|"paused"|"done"; events:{time:string;msg:string;type:"info"|"dump"|"depot"|"warn"}[]; }
@@ -50,7 +51,7 @@ export default function TruckSimulation({onStats}:{onStats?:(s:TruckStats)=>void
       delete(L.Icon.Default.prototype as any)._getIconUrl;
       const map=L.map(cRef.current!,{center:[13.0575,77.6285],zoom:16,zoomControl:false});
       L.control.zoom({position:"bottomright"}).addTo(map);
-      L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",{maxZoom:19}).addTo(map);
+      L.tileLayer(cartoTileUrl("rastertiles/voyager"),{attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',subdomains:"abcd",maxZoom:19}).addTo(map);
       mapR.current=map;
       STOPS.forEach(s=>{
         if(s.type==="dump")L.circleMarker([s.lat,s.lon],{radius:9,fillColor:s.risk!>=0.85?"#ef4444":"#f97316",color:"#fff",weight:2,fillOpacity:0.85}).bindTooltip(`<b style="color:#ef4444">${s.name}</b><br><small>${s.waste_kg}kg</small>`,{direction:"top"}).addTo(map);

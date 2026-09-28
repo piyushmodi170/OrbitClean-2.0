@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { apiBase as defaultApiBase } from "@/lib/api";
 
 interface ModelVersion {
   version: string;
@@ -9,7 +10,7 @@ interface ModelVersion {
   trained_at: string;
 }
 
-export default function RetrainStatus({ apiBase = "http://localhost:8000" }: { apiBase?: string }) {
+export default function RetrainStatus({ apiBase = defaultApiBase() }: { apiBase?: string }) {
   const [versions, setVersions] = useState<ModelVersion[]>([
     { version: "v1.0.0", accuracy: 0.80, training_images: 1200, trained_at: "2026-03-15T00:00:00" },
   ]);

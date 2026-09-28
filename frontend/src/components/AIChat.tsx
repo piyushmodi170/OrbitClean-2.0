@@ -1,7 +1,9 @@
 "use client";
 import { useState, useRef, useEffect, useCallback } from "react";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+import { apiBase } from "@/lib/api";
+
+const API_BASE = apiBase();
 
 interface Message {
   role: "user" | "assistant";
